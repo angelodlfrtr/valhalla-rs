@@ -11,7 +11,7 @@ keywords = ["Valhalla", "OpenStreetMap", "routing"]
 
 [dependencies]
 anyhow = "1.0"
-autocxx = { git = "https://github.com/google/autocxx.git", version = "0.15" }
+autocxx = { git = "https://github.com/google/autocxx.git", tag = "v0.23.1" }
 cc = "1.0"
 cxx = "1.0"
 serde = { version = "1.0.130", features = ["derive"] }
@@ -23,7 +23,7 @@ prost = "0.9"
 [build-dependencies]
 anyhow = "1.0"
 cc = "1.0"
-autocxx-build = { git = "https://github.com/google/autocxx.git", version = "0.15" }
+autocxx-build = { git = "https://github.com/google/autocxx.git", tag = "v0.23.1" }
 cmake = "0.1"
 cxx-build = "1.0"
 tonic-build = "0.6"

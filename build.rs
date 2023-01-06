@@ -11,11 +11,13 @@ fn compile() -> String {
     }
 
     let dst = conf
+        .define("ENABLE_TOOLS", "OFF")
+        .define("ENABLE_DATA_TOOLS", "OFF")
+        .define("ENABLE_HTTP", "OFF")
+        .define("ENABLE_PYTHON_BINDINGS", "OFF")
+        .define("ENABLE_SERVICES", "OFF")
         .define("ENABLE_TESTS", "OFF")
         .define("ENABLE_BENCHMARKS", "OFF")
-        .define("ENABLE_HTTP", "OFF")
-        .define("ENABLE_SERVICES", "OFF")
-        .define("ENABLE_PYTHON_BINDINGS", "OFF")
         .define("CMAKE_BUILD_TYPE", build_type)
         .build();
 
@@ -32,13 +34,15 @@ fn generate_bindings(out_dir: String) {
     ];
 
     let mut b = autocxx_build::Builder::new("src/lib.rs", &includes)
-        .extra_clang_args(&["-std=c++14"])
-        .expect_build();
+        .extra_clang_args(&["-std=c++17"])
+        .build()
+        .unwrap();
+    // .expect_build();
 
     b.opt_level(2)
         .cpp(true)
-        .flag_if_supported("-std=c++14")
-        .flag_if_supported("/std:c++14")
+        .flag_if_supported("-std=c++17")
+        .flag_if_supported("/std:c++17")
         .file("src/valhalla.cc")
         .compile("valhalla-wrapper");
 
