@@ -1,26 +1,24 @@
+use std::collections::HashMap;
+
 use valhalla::{
-    // proto::{Api, CostingOptions, LatLng, Location, Options, HasLat},
-    proto::{lat_lng, Api, LatLng, Location, Options},
+    proto::{costing, lat_lng, options, Api, Costing, LatLng, Location, Options},
     ProtobufActor,
 };
 
 #[test]
 fn test_proto_route() {
-    // valhalla::proto::lat_lng::HasLat
-    // lat_lng::HasLat::Lat()
-
     let actor = ProtobufActor::new("tests/valhalla.json");
     let api = Api {
         options: Some(Options {
-            // id: Some("kotti_to_hermannplatz".into()),
-            units: 0,
+            has_id: Some(options::HasId::Id(String::from("kotti_to_hermannplatz"))),
+            units: 0, // km
             locations: vec![
                 Location {
                     ll: Some(LatLng {
                         has_lat: Some(lat_lng::HasLat::Lat(52.499078)),
                         has_lng: Some(lat_lng::HasLng::Lng(13.418230)),
                     }),
-                    // name: Some("Kottbusser Tor".into()),
+                    name: "Kottbusser Tor".into(),
                     ..Default::default()
                 },
                 Location {
@@ -28,23 +26,27 @@ fn test_proto_route() {
                         has_lat: Some(lat_lng::HasLat::Lat(52.487331)),
                         has_lng: Some(lat_lng::HasLng::Lng(13.425042)),
                     }),
-                    // name: Some("Hermannplatz".into()),
+                    name: "Hermannplatz".into(),
                     ..Default::default()
                 },
             ],
-            // costing: Some(0),
-            // costing_options: vec![CostingOptions {
-            //     transport_type: Some("car".into()),
-            //     alley_factor: Some(1.0),
-            //     use_highways: Some(0.5),
-            //     use_tolls: Some(0.5),
-            //     use_distance: Some(0.),
-            //     height: Some(1.6),
-            //     width: Some(1.9),
-            //     shortest: Some(true),
-            //     costing: Some(0),
-            //     ..Default::default()
-            // }],
+            costing_type: costing::Type::Auto.into(),
+            costings: HashMap::from([(
+                costing::Type::Auto.into(),
+                Costing {
+                    has_options: Some(costing::HasOptions::Options(costing::Options {
+                        has_alley_factor: Some(costing::options::HasAlleyFactor::AlleyFactor(1.0)),
+                        has_use_highways: Some(costing::options::HasUseHighways::UseHighways(0.5)),
+                        has_use_tolls: Some(costing::options::HasUseTolls::UseTolls(0.5)),
+                        has_use_distance: Some(costing::options::HasUseDistance::UseDistance(0.)),
+                        has_height: Some(costing::options::HasHeight::Height(1.6)),
+                        has_width: Some(costing::options::HasWidth::Width(1.9)),
+                        has_shortest: Some(costing::options::HasShortest::Shortest(true)),
+                        ..Default::default()
+                    })),
+                    ..Default::default()
+                },
+            )]),
             ..Default::default()
         }),
         ..Default::default()
