@@ -1,9 +1,16 @@
+fn update_git_submodules() {
+    std::process::Command::new("git")
+        .args(["submodule", "update", "--init", "--recursive", "--depth", "1"])
+        .output()
+        .expect("Failed to fetch git submodules!");
+}
+
 fn compile() -> String {
-    let build_type = if Ok("release".to_owned()) == std::env::var("PROFILE") {
-        "Release"
-    } else {
-        "Debug"
-    };
+    // let build_type = if Ok("release".to_owned()) == std::env::var("PROFILE") {
+    //     "Release"
+    // } else {
+    //     "Debug"
+    // };
 
     let mut conf = cmake::Config::new("valhalla");
     if cfg!(target_os = "macos") {
@@ -18,7 +25,8 @@ fn compile() -> String {
         .define("ENABLE_SERVICES", "OFF")
         .define("ENABLE_TESTS", "OFF")
         .define("ENABLE_BENCHMARKS", "OFF")
-        .define("CMAKE_BUILD_TYPE", build_type)
+        // .define("CMAKE_BUILD_TYPE", build_type)
+        .define("CMAKE_BUILD_TYPE", "Release")
         .build();
 
     dst.display().to_string()
@@ -76,6 +84,7 @@ fn compile_protos() {
 }
 
 fn main() {
+    update_git_submodules();
     let out_dir = compile();
     println!("OUT_DIR: {}", out_dir);
     generate_bindings(out_dir);
