@@ -59,7 +59,7 @@ fn generate_bindings(out_dir: String) {
     println!("cargo:rustc-link-search={}/lib", out_dir);
     println!("cargo:rustc-link-lib=valhalla");
 
-    //println!("cargo:rustc-link-lib=prime_server");
+    // println!("cargo:rustc-link-lib=prime_server");
     println!("cargo:rustc-link-lib=protoc");
     println!("cargo:rustc-link-lib=protobuf");
     println!("cargo:rustc-link-lib=zmq");
